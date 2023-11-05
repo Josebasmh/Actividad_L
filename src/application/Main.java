@@ -5,6 +5,7 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
@@ -16,11 +17,14 @@ public class Main extends Application{
 	public void start(Stage stage) throws Exception {
 		try {
 			root = (FlowPane)FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
-			stage.setTitle("LOGIN");
-			Scene scene = new Scene(root,400,200);
+			stage.setTitle("AVIONES - LOGIN");
+			Scene scene = new Scene(root,410,210);
 			stage.setScene(scene);
-			stage.setMinWidth(400);
-			stage.setMinHeight(200);
+			stage.setMinWidth(410);
+			stage.setMinHeight(210);
+			stage.setMaxWidth(410);
+			stage.setMaxHeight(210);
+			stage.getIcons().add(new Image(getClass().getResource("/img/avion.png").toString()));
 			stage.show();	
 		}catch(IOException e) {
 			System.err.println(e.getMessage());
