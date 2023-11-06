@@ -11,10 +11,14 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyEvent;
 
 public class ActividadLControllerAeropuertosAviones implements Initializable{
 
+    @FXML
+    private ToggleGroup grupoRadioButton;
+    
     @FXML
     private Menu menuAeropuertos;
 
@@ -73,7 +77,6 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
-		
 	}
 
 }
