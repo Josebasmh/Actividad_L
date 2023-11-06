@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+
+<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="600.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MenuBar prefWidth="820.0">
+        <menus>
+          <Menu fx:id="menuAeropuertos" mnemonicParsing="false" text="Aeropuertos">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu fx:id="menuAviones" mnemonicParsing="false" text="Aviones">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Label text="LISTADO DE AEROPUERTOS">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="800.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="400.0" spacing="20.0">
+               <children>
+                  <RadioButton mnemonicParsing="false" text="Públicos" />
+                  <RadioButton mnemonicParsing="false" text="Privados" />
+               </children>
+               <padding>
+                  <Insets left="50.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="400.0" spacing="20.0">
+               <children>
+                  <Label text="Nombre:" />
+                  <TextField />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets right="50.0" />
+               </padding>
+            </HBox>
+         </children>
+      </HBox>
+      <TableView prefHeight="404.0" prefWidth="800.0">
+        <columns>
+          <TableColumn prefWidth="46.0" text="ID" />
+          <TableColumn prefWidth="143.0" text="Nombre" />
+            <TableColumn prefWidth="81.0" text="País" />
+            <TableColumn prefWidth="93.0" text="Ciudad" />
+            <TableColumn prefWidth="103.0" text="Calle" />
+            <TableColumn prefWidth="56.0" text="Número" />
+            <TableColumn prefWidth="64.0" text="Año" />
+            <TableColumn prefWidth="137.0" text="Capacidad" />
+            <TableColumn prefWidth="76.0" text="Nº Socios" />
+        </columns>
+         <FlowPane.margin>
+            <Insets left="10.0" right="10.0" />
+         </FlowPane.margin>
+      </TableView>
+   </children>
+</FlowPane>
