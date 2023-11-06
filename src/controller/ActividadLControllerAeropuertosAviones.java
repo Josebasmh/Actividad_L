@@ -13,6 +13,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyEvent;
+import model.Aeropuerto;
 
 public class ActividadLControllerAeropuertosAviones implements Initializable{
 
@@ -32,34 +33,40 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     private RadioButton rbPublico;
     
     @FXML
-    private TableView<?> tvTabla;
+    private TableView<Aeropuerto> tvTabla;
 
     @FXML
-    private TableColumn<?, ?> tcAño;
+    private TableColumn<Aeropuerto, Integer> tcAño;
 
     @FXML
-    private TableColumn<?, ?> tcCalle;
+    private TableColumn<Aeropuerto, String> tcCalle;
 
     @FXML
-    private TableColumn<?, ?> tcCapacidad;
+    private TableColumn<Aeropuerto, Integer> tcCapacidad;
 
     @FXML
-    private TableColumn<?, ?> tcCiudad;
+    private TableColumn<Aeropuerto, String> tcCiudad;
+    
+    @FXML
+    private TableColumn<Aeropuerto, Integer> tcFinanciacion;
 
     @FXML
-    private TableColumn<?, ?> tcId;
+    private TableColumn<Aeropuerto, Integer> tcId;
 
     @FXML
-    private TableColumn<?, ?> tcNombre;
+    private TableColumn<Aeropuerto, String> tcNombre;
 
     @FXML
-    private TableColumn<?, ?> tcNumero;
+    private TableColumn<Aeropuerto, Integer> tcNumero;
 
     @FXML
-    private TableColumn<?, ?> tcPais;
+    private TableColumn<Aeropuerto, String> tcPais;
 
     @FXML
-    private TableColumn<?, ?> tcSocios;
+    private TableColumn<Aeropuerto, Integer> tcSocios;
+    
+    @FXML
+    private TableColumn<Aeropuerto, Integer> tcTrabajadores;
 
     @FXML
     private TextField tfFiltro;
@@ -71,7 +78,17 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 
     @FXML
     void publicoPrivado(ActionEvent event) {
-
+    	if (rbPublico.isSelected()) {
+    		tcSocios.setVisible(false);
+    		tcFinanciacion.setVisible(true);
+    		tcTrabajadores.setVisible(true);
+    		tcCapacidad.setPrefWidth(105);
+    	}else {
+    		tcSocios.setVisible(true);
+    		tcFinanciacion.setVisible(false);
+    		tcTrabajadores.setVisible(false);
+    		tcCapacidad.setPrefWidth(238);
+    	}
     }
 
 	@Override
