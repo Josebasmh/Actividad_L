@@ -3,6 +3,8 @@ package controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import dao.AeropuertoDao;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,8 +14,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
-import model.Aeropuerto;
+import model.RegistroTabla;
 
 public class ActividadLControllerAeropuertosAviones implements Initializable{
 
@@ -33,43 +36,49 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     private RadioButton rbPublico;
     
     @FXML
-    private TableView<Aeropuerto> tvTabla;
+    private TableView<RegistroTabla> tvTabla;
 
     @FXML
-    private TableColumn<Aeropuerto, Integer> tcAño;
+    private TableColumn<RegistroTabla, Integer> tcAño;
 
     @FXML
-    private TableColumn<Aeropuerto, String> tcCalle;
+    private TableColumn<RegistroTabla, String> tcCalle;
 
     @FXML
-    private TableColumn<Aeropuerto, Integer> tcCapacidad;
+    private TableColumn<RegistroTabla, Integer> tcCapacidad;
 
     @FXML
-    private TableColumn<Aeropuerto, String> tcCiudad;
+    private TableColumn<RegistroTabla, String> tcCiudad;
     
     @FXML
-    private TableColumn<Aeropuerto, Integer> tcFinanciacion;
+    private TableColumn<RegistroTabla, Integer> tcFinanciacion;
 
     @FXML
-    private TableColumn<Aeropuerto, Integer> tcId;
+    private TableColumn<RegistroTabla, Integer> tcId;
 
     @FXML
-    private TableColumn<Aeropuerto, String> tcNombre;
+    private TableColumn<RegistroTabla, String> tcNombre;
 
     @FXML
-    private TableColumn<Aeropuerto, Integer> tcNumero;
+    private TableColumn<RegistroTabla, Integer> tcNumero;
 
     @FXML
-    private TableColumn<Aeropuerto, String> tcPais;
+    private TableColumn<RegistroTabla, String> tcPais;
 
     @FXML
-    private TableColumn<Aeropuerto, Integer> tcSocios;
+    private TableColumn<RegistroTabla, Integer> tcSocios;
     
     @FXML
-    private TableColumn<Aeropuerto, Integer> tcTrabajadores;
+    private TableColumn<RegistroTabla, Integer> tcTrabajadores;
 
     @FXML
     private TextField tfFiltro;
+    
+    // Variables de clase
+    AeropuertoDao aDao= new AeropuertoDao();
+    static ObservableList<RegistroTabla>listaRegistros;
+    static ObservableList<RegistroTabla>listaFiltrada;
+    
 
     @FXML
     void filtrarPorNombre(KeyEvent event) {
@@ -93,7 +102,22 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
+		listaRegistros= aDao.cargarAeropuertos();
+		listaFiltrada= aDao.cargarAeropuertos();
+		
+		tcId.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("id"));
+		tcNombre.setCellValueFactory(new PropertyValueFactory<RegistroTabla, String>("nombre"));
+		tcPais.setCellValueFactory(new PropertyValueFactory<RegistroTabla, String>("pais"));
+		tcCiudad.setCellValueFactory(new PropertyValueFactory<RegistroTabla, String>("ciudad"));
+		tcCalle.setCellValueFactory(new PropertyValueFactory<RegistroTabla, String>("calle"));
+		tcNumero.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("numero"));
+		tcAño.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("anio"));
+		tcCapacidad.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("capacidad"));
+		tcSocios.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("socios"));
+		tcFinanciacion.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("financiacion"));
+		tcTrabajadores.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("trabajadores"));
+		
+		tvTabla.setItems(listaFiltrada);
 	}
 
 }
