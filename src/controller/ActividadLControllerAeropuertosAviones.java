@@ -1,6 +1,5 @@
 package controller;
 
-import java.math.BigDecimal;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.ResourceBundle;
@@ -85,7 +84,17 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 
     @FXML
     void filtrarPorNombre(KeyEvent event) {
-
+    	String sFiltro = tfFiltro.getText(); 
+    	
+    	// Iterador para la lista y se añade a una lista auxiliar para mostrar en la tabla
+    	Iterator<RegistroTabla>it = listaRegistros.iterator();
+    	listaFiltrada.clear();    	
+    	while(it.hasNext()) {
+    		RegistroTabla rt = it.next();
+    		if (rt.getNombre().contains(sFiltro)) {
+    			listaFiltrada.add(rt);
+    		}
+    	}
     }
 
     @FXML
