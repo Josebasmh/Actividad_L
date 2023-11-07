@@ -1,5 +1,6 @@
 package dao;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +14,11 @@ public class AeropuertoDao {
 
 	private ConexionBD conexion;
 	
+	/**
+	 * Carga los datos de la tabla dependiendo si elegimos aeropuertos publicos o privados.
+	 * @param bPrivado
+	 * @return ObservableList<RegistroTabla>
+	 */
 	public ObservableList<RegistroTabla> cargarAeropuertos(boolean bPrivado){
 		ObservableList<RegistroTabla> listaAeropuertos = FXCollections.observableArrayList();
 		try {
@@ -24,7 +30,7 @@ public class AeropuertoDao {
 						+ "WHERE aeropuertos.id=direcciones.id "
 						+ "AND aeropuertos.id=aeropuertos_privados.id_aeropuerto;";	
 			}else {
-				consulta= "SELECT aeropuertos.id,nombre,pais,ciudad,calle,numero,anio_inauguracion,capacidad,financiacion,num_trabajadores"
+				consulta= "SELECT aeropuertos.id,nombre,pais,ciudad,calle,numero,anio_inauguracion,capacidad,financiacion,num_trabajadores "
 						+ "FROM aeropuertos_publicos,aeropuertos,direcciones "
 						+ "WHERE aeropuertos.id=direcciones.id "
 						+ "AND aeropuertos.id=aeropuertos_publicos.id_aeropuerto;";
@@ -41,16 +47,15 @@ public class AeropuertoDao {
 				int nnumero=rs.getInt("numero");
 				int nanio=rs.getInt("anio_inauguracion");
 				int ncapacidad=rs.getInt("capacidad");
-				RegistroTabla rt;
-				if (bPrivado) {
-					int nsocios=rs.getInt("numero_socios");
+				RegistroTabla rt; 
+				if(bPrivado) {
+					Integer nsocios=rs.getInt("numero_socios");
 					rt = new RegistroTabla(nid, snombre, spais, sciudad, scalle, nnumero, nanio, ncapacidad, nsocios);
 				}else {
-					int nfinanciacion=rs.getInt("financiacion");
-					int ntrabajadores=rs.getInt("num_trabajadores");
+					Integer nfinanciacion=rs.getInt("financiacion");
+					Integer ntrabajadores=rs.getInt("num_trabajadores");
 					rt = new RegistroTabla(nid, snombre, spais, sciudad, scalle, nnumero, nanio, ncapacidad, nfinanciacion,ntrabajadores);
 				}
-				
 				listaAeropuertos.add(rt);
 			}
 		} catch (SQLException e) {

@@ -4,7 +4,8 @@ import java.util.Objects;
 
 public class RegistroTabla {
 
-	private int id,anio,capacidad,numero,socios,financiacion,num_trabajadores;
+	private int id;
+	private Integer capacidad,numero,anio,socios,financiacion,num_trabajadores;
 	private String nombre,pais,ciudad,calle;
 	
 	/**
@@ -29,6 +30,8 @@ public class RegistroTabla {
 		setAnio(a);
 		setCapacidad(c);
 		setSocios(ns);
+		setFinanciacion(null);
+		setNum_trabajadores(null);
 	}
 	/**
 	 * Constructor para registro de aeropuerto público.
@@ -52,6 +55,7 @@ public class RegistroTabla {
 		setNumero(nu);
 		setAnio(a);
 		setCapacidad(c);
+		setSocios(null);
 		setFinanciacion(f);
 		setNum_trabajadores(t);
 	}
@@ -62,16 +66,16 @@ public class RegistroTabla {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getAnio() {
+	public Integer getAnio() {
 		return anio;
 	}
-	public void setAnio(int anio) {
-		this.anio = anio;
+	public void setAnio(Integer a) {
+		this.anio = a;
 	}
-	public int getCapacidad() {
+	public Integer getCapacidad() {
 		return capacidad;
 	}
-	public void setCapacidad(int capacidad) {
+	public void setCapacidad(Integer capacidad) {
 		this.capacidad = capacidad;
 	}
 	public String getNombre() {
@@ -80,22 +84,22 @@ public class RegistroTabla {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public int getSocios() {
+	public Integer getSocios() {
 		return socios;
 	}
-	public void setSocios(int socios) {
-		this.socios = socios;
-	}
-	public int getFinanciacion() {
+	public Integer getFinanciacion() {
 		return financiacion;
 	}
-	public void setFinanciacion(Integer f) {
-		this.financiacion = f;
+	public void setFinanciacion(Integer financiacion) {
+		this.financiacion = financiacion;
 	}
-	public int getNum_trabajadores() {
+	public void setSocios(Integer socios) {
+		this.socios = socios;
+	}
+	public Integer getNum_trabajadores() {
 		return num_trabajadores;
 	}
-	public void setNum_trabajadores(int num_trabajadores) {
+	public void setNum_trabajadores(Integer num_trabajadores) {
 		this.num_trabajadores = num_trabajadores;
 	}
 	public String getPais() {
@@ -116,10 +120,10 @@ public class RegistroTabla {
 	public void setCalle(String calle) {
 		this.calle = calle;
 	}
-	public int getNumero() {
+	public Integer getNumero() {
 		return numero;
 	}
-	public void setNumero(int numero) {
+	public void setNumero(Integer numero) {
 		this.numero = numero;
 	}
 	
@@ -139,4 +143,12 @@ public class RegistroTabla {
 		RegistroTabla other = (RegistroTabla) obj;
 		return id == other.id;
 	}
+	@Override
+	public String toString() {
+		return "RegistroTabla [id=" + id + ", capacidad=" + capacidad + ", numero=" + numero + ", anio=" + anio
+				+ ", socios=" + socios + ", financiacion=" + financiacion + ", num_trabajadores=" + num_trabajadores
+				+ ", nombre=" + nombre + ", pais=" + pais + ", ciudad=" + ciudad + ", calle=" + calle + "]";
+	}
+	
+	
 }

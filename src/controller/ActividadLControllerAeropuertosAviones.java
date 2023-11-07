@@ -1,6 +1,8 @@
 package controller;
 
+import java.math.BigDecimal;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 
 import dao.AeropuertoDao;
@@ -88,7 +90,11 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 
     @FXML
     void publicoPrivado(ActionEvent event) {
-    	//if (){}else{}// meter condicion para que si el radiobutton es uno u otro cambiar el booleano
+    	if (rbPrivado.isSelected()){
+    		bPrivado=true;
+    	}else{
+    		bPrivado=false;
+    	}
     	if (rbPublico.isSelected()) {
     		tcSocios.setVisible(false);
     		tcFinanciacion.setVisible(true);
@@ -106,7 +112,6 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		rellenarTabla();
-		tvTabla.setItems(listaFiltrada);
 	}
 
 	public void rellenarTabla() {
@@ -121,8 +126,12 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 		tcNumero.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("numero"));
 		tcAño.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("anio"));
 		tcCapacidad.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("capacidad"));
-		tcSocios.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("socios"));
-		tcFinanciacion.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("financiacion"));
-		tcTrabajadores.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("num_trabajadores"));
+		if (bPrivado) {
+			tcSocios.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("socios"));			
+		}else {
+			tcTrabajadores.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("num_trabajadores"));
+			tcFinanciacion.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("financiacion"));
+		}
+		tvTabla.setItems(listaFiltrada);
 	}
 }
