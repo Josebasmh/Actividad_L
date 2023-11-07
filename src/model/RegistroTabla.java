@@ -59,6 +59,10 @@ public class RegistroTabla {
 		setFinanciacion(f);
 		setNum_trabajadores(t);
 	}
+	
+	public RegistroTabla() {
+	}
+	
 	// Metodos getter y setter
 	public int getId() {
 		return id;

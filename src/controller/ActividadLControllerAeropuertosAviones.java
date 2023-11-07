@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.ResourceBundle;
@@ -8,7 +9,9 @@ import dao.AeropuertoDao;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
@@ -17,6 +20,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.FlowPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import model.RegistroTabla;
 
 public class ActividadLControllerAeropuertosAviones implements Initializable{
@@ -79,7 +85,8 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     AeropuertoDao aDao= new AeropuertoDao();
     static ObservableList<RegistroTabla>listaRegistros;
     static ObservableList<RegistroTabla>listaFiltrada;
-    private boolean bPrivado=true;
+    static RegistroTabla registro; 
+    static boolean bPrivado=true;
     
 
     @FXML
@@ -124,8 +131,9 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     }
 
     @FXML
-    void añadirAeropuerto(ActionEvent event) {
-    	
+    void aniadir(ActionEvent event) {
+    	registro=new RegistroTabla();
+    	crearVentanaAux();
     }
 
     @FXML
@@ -135,7 +143,19 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 
     @FXML
     void editar(ActionEvent event) {
-
+    	try {
+    		RegistroTabla registrotabla= tvTabla.getSelectionModel().getSelectedItem();
+    		if  (bPrivado) {
+    			registro=new RegistroTabla(registrotabla.getId(),registrotabla.getNombre(), registrotabla.getPais(), registrotabla.getCiudad(), registrotabla.getCalle(), registrotabla.getNumero(),
+    					registrotabla.getAnio(), registrotabla.getCapacidad(), registrotabla.getSocios());
+    		}else {
+    			registro=new RegistroTabla(registrotabla.getId(),registrotabla.getNombre(), registrotabla.getPais(), registrotabla.getCiudad(), registrotabla.getCalle(), registrotabla.getNumero(),
+    					registrotabla.getAnio(), registrotabla.getCapacidad(), registrotabla.getFinanciacion(),registrotabla.getNum_trabajadores());
+    		}
+    		crearVentanaAux();
+    	}catch(NullPointerException e){
+    		ActividadLControllerLogeo.ventanaAlerta("E", "Seleccione un registro de la tabla. Si no hay, añada uno.");
+    	}
     }
     
     @FXML
@@ -169,4 +189,23 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 		tvTabla.setItems(listaFiltrada);
 	}
 	
+	void crearVentanaAux() {
+		
+		// Creación de ventana
+		Stage arg0 = new Stage();
+		arg0.setTitle("AÑADIR AVIONES"); 
+		FlowPane aux;
+		try {
+			aux = (FlowPane)FXMLLoader.load(getClass().getResource("/fxml/aniadirAeropuerto.fxml"));
+			Scene scene = new Scene(aux,420,600);
+			arg0.setScene(scene);
+			arg0.setMinWidth(420);
+			arg0.setMinHeight(600);
+			arg0.initModality(Modality.APPLICATION_MODAL);
+			arg0.show();
+		} catch (IOException e) {
+			System.out.println("La ventana no se abrió correctamente.");
+			e.printStackTrace();
+		}
+	}
 }

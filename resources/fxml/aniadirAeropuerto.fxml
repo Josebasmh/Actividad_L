@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
@@ -45,8 +46,8 @@
             <Label text="Ciudad:" GridPane.rowIndex="2" />
             <Label text="Calle:" GridPane.rowIndex="3" />
             <Label text="Número:" GridPane.rowIndex="4" />
-            <Label text="Número de trabajadores:" GridPane.rowIndex="9" />
-            <Label text="Financiación" GridPane.rowIndex="8" />
+            <Label fx:id="lbTrabajadores" text="Número de trabajadores:" GridPane.rowIndex="9" />
+            <Label fx:id="lbFinanciacion" text="Financiación" GridPane.rowIndex="8" />
             <Label text="Capacidad:" GridPane.rowIndex="6" />
             <Label text="Año de inaguración:" GridPane.rowIndex="5" />
             <TextField fx:id="tfNombre" GridPane.columnIndex="1" />
@@ -58,8 +59,12 @@
             <TextField fx:id="tfCapacidad" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <TextField fx:id="tfFinanciacion" GridPane.columnIndex="1" GridPane.rowIndex="8" />
             <TextField fx:id="tfTrabajadores" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-            <RadioButton fx:id="rbPublico" mnemonicParsing="false" text="Público" GridPane.rowIndex="7" />
-            <RadioButton fx:id="rbPrivado" mnemonicParsing="false" text="Privado" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <RadioButton fx:id="rbPublico" mnemonicParsing="false" onAction="#publicoPrivado" text="Público" GridPane.rowIndex="7">
+               <toggleGroup>
+                  <ToggleGroup fx:id="pp" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="rbPrivado" mnemonicParsing="false" onAction="#publicoPrivado" text="Privado" toggleGroup="$pp" GridPane.columnIndex="1" GridPane.rowIndex="7" />
          </children>
          <FlowPane.margin>
             <Insets bottom="30.0" />
