@@ -117,7 +117,32 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     	}
     	rellenarTabla();
     }
+    
+    @FXML
+    void activarDesactivar(ActionEvent event) {
 
+    }
+
+    @FXML
+    void añadirAeropuerto(ActionEvent event) {
+    	
+    }
+
+    @FXML
+    void borrar(ActionEvent event) {
+
+    }
+
+    @FXML
+    void editar(ActionEvent event) {
+
+    }
+    
+    @FXML
+    void informacion(ActionEvent event) {
+
+    }    
+    
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		rellenarTabla();
@@ -143,4 +168,5 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 		}
 		tvTabla.setItems(listaFiltrada);
 	}
+	
 }

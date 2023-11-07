@@ -14,19 +14,24 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-
 <FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="600.0" prefWidth="1020.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ActividadLControllerAeropuertosAviones">
    <children>
       <MenuBar prefWidth="1020.0">
         <menus>
           <Menu fx:id="menuAeropuertos" mnemonicParsing="false" text="Aeropuertos">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+                  <MenuItem mnemonicParsing="false" onAction="#añadirAeropuerto" text="Añadir" />
+                  <MenuItem mnemonicParsing="false" onAction="#editar" text="Editar" />
+              <MenuItem mnemonicParsing="false" onAction="#borrar" text="Borrar" />
+                  <MenuItem mnemonicParsing="false" onAction="#informacion" text="Mostrar Información" />
             </items>
           </Menu>
           <Menu fx:id="menuAviones" mnemonicParsing="false" text="Aviones">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem mnemonicParsing="false" onAction="#añadirAviones" text="Añadir" />
+                  <MenuItem mnemonicParsing="false" onAction="#activarDesactivar" text="Activar/Desactivar" />
+                  <MenuItem mnemonicParsing="false" onAction="#borrar" text="Borrar" />
+                  <MenuItem mnemonicParsing="false" text="Ayuda" />
             </items>
           </Menu>
         </menus>
