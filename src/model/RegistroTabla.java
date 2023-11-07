@@ -25,7 +25,7 @@ public class RegistroTabla {
 		pais=p;
 		ciudad=ci;
 		calle=ca;
-		numero=nu;
+		setNumero(nu);
 		anio=a;
 		capacidad=c;
 		socios=ns;
@@ -49,7 +49,7 @@ public class RegistroTabla {
 		pais=p;
 		ciudad=ci;
 		calle=ca;
-		numero=nu;
+		setNumero(nu);
 		anio=a;
 		capacidad=c;
 	}
@@ -114,7 +114,12 @@ public class RegistroTabla {
 	public void setCalle(String calle) {
 		this.calle = calle;
 	}
-	
+	public int getNumero() {
+		return numero;
+	}
+	public void setNumero(int numero) {
+		this.numero = numero;
+	}
 	
 	@Override
 	public int hashCode() {
@@ -132,7 +137,4 @@ public class RegistroTabla {
 		RegistroTabla other = (RegistroTabla) obj;
 		return id == other.id;
 	}
-	
-	
-	
 }
