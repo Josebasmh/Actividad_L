@@ -13,13 +13,23 @@ public class AeropuertoDao {
 
 	private ConexionBD conexion;
 	
-	public ObservableList<RegistroTabla> cargarAeropuertos(){
+	public ObservableList<RegistroTabla> cargarAeropuertos(boolean bPrivado){
 		ObservableList<RegistroTabla> listaAeropuertos = FXCollections.observableArrayList();
 		try {
 			conexion=new ConexionBD();
-			String consulta= "SELECT aeropuertos.id,nombre,pais,ciudad,calle,numero,anio_inauguracion,capacidad,numero_socios "
-					+ "FROM aeropuertos_privados,aeropuertos,direcciones WHERE aeropuertos.id=direcciones.id "
-					+ "AND aeropuertos.id=id_aeropuerto";
+			String consulta = "";
+			if (bPrivado) {
+				consulta= "SELECT aeropuertos.id,nombre,pais,ciudad,calle,numero,anio_inauguracion,capacidad,numero_socios "
+						+ "FROM aeropuertos_privados,aeropuertos,direcciones "
+						+ "WHERE aeropuertos.id=direcciones.id "
+						+ "AND aeropuertos.id=aeropuertos_privados.id_aeropuerto;";	
+			}else {
+				consulta= "SELECT aeropuertos.id,nombre,pais,ciudad,calle,numero,anio_inauguracion,capacidad,financiacion,num_trabajadores"
+						+ "FROM aeropuertos_publicos,aeropuertos,direcciones "
+						+ "WHERE aeropuertos.id=direcciones.id "
+						+ "AND aeropuertos.id=aeropuertos_publicos.id_aeropuerto;";
+			}
+			
 			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
 			ResultSet rs = pstmt.executeQuery();   				
 			while (rs.next()) {
@@ -31,8 +41,16 @@ public class AeropuertoDao {
 				int nnumero=rs.getInt("numero");
 				int nanio=rs.getInt("anio_inauguracion");
 				int ncapacidad=rs.getInt("capacidad");
-				int nsocios=rs.getInt("numero_socios");
-				RegistroTabla rt = new RegistroTabla(nid, snombre, spais, sciudad, scalle, nnumero, nanio, ncapacidad, nsocios);
+				RegistroTabla rt;
+				if (bPrivado) {
+					int nsocios=rs.getInt("numero_socios");
+					rt = new RegistroTabla(nid, snombre, spais, sciudad, scalle, nnumero, nanio, ncapacidad, nsocios);
+				}else {
+					int nfinanciacion=rs.getInt("financiacion");
+					int ntrabajadores=rs.getInt("num_trabajadores");
+					rt = new RegistroTabla(nid, snombre, spais, sciudad, scalle, nnumero, nanio, ncapacidad, nfinanciacion,ntrabajadores);
+				}
+				
 				listaAeropuertos.add(rt);
 			}
 		} catch (SQLException e) {

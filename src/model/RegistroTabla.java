@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class RegistroTabla {
 
-	private int id,anio,capacidad,numero,socios,financiacion,numeroTrabajadores;
+	private int id,anio,capacidad,numero,socios,financiacion,num_trabajadores;
 	private String nombre,pais,ciudad,calle;
 	
 	/**
@@ -19,16 +19,16 @@ public class RegistroTabla {
 	 * @param c capacidad
 	 * @param ns Nº socios
 	 */
-	public RegistroTabla(int i,String no,String p,String ci,String ca,int nu,int a, int c,int ns) {
-		id=i;
-		nombre=no;
-		pais=p;
-		ciudad=ci;
-		calle=ca;
+	public RegistroTabla(int i,String no,String p,String ci,String ca,Integer nu,Integer a,Integer c,Integer ns) {
+		setId(i);
+		setNombre(no);
+		setPais(p);
+		setCiudad(ci);
+		setCalle(ca);
 		setNumero(nu);
-		anio=a;
-		capacidad=c;
-		socios=ns;
+		setAnio(a);
+		setCapacidad(c);
+		setSocios(ns);
 	}
 	/**
 	 * Constructor para registro de aeropuerto público.
@@ -43,15 +43,17 @@ public class RegistroTabla {
 	 * @param f financiación
 	 * @param t Nº trabajadores
 	 */
-	public RegistroTabla(int i,String no,String p,String ci,String ca,int nu,int a,int c,int f,int t) {
-		id=i;
-		nombre=no;
-		pais=p;
-		ciudad=ci;
-		calle=ca;
+	public RegistroTabla(int i,String no,String p,String ci,String ca,Integer nu,Integer a,Integer c,Integer f,Integer t) {
+		setId(i);
+		setNombre(no);
+		setPais(p);
+		setCiudad(ci);
+		setCalle(ca);
 		setNumero(nu);
-		anio=a;
-		capacidad=c;
+		setAnio(a);
+		setCapacidad(c);
+		setFinanciacion(f);
+		setNum_trabajadores(t);
 	}
 	// Metodos getter y setter
 	public int getId() {
@@ -87,14 +89,14 @@ public class RegistroTabla {
 	public int getFinanciacion() {
 		return financiacion;
 	}
-	public void setFinanciacion(int financiacion) {
-		this.financiacion = financiacion;
+	public void setFinanciacion(Integer f) {
+		this.financiacion = f;
 	}
-	public int getNumeroTrabajadores() {
-		return numeroTrabajadores;
+	public int getNum_trabajadores() {
+		return num_trabajadores;
 	}
-	public void setNumeroTrabajadores(int numeroTrabajadores) {
-		this.numeroTrabajadores = numeroTrabajadores;
+	public void setNum_trabajadores(int num_trabajadores) {
+		this.num_trabajadores = num_trabajadores;
 	}
 	public String getPais() {
 		return pais;

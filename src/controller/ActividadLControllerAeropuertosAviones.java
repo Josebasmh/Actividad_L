@@ -78,6 +78,7 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     AeropuertoDao aDao= new AeropuertoDao();
     static ObservableList<RegistroTabla>listaRegistros;
     static ObservableList<RegistroTabla>listaFiltrada;
+    private boolean bPrivado=true;
     
 
     @FXML
@@ -87,6 +88,7 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 
     @FXML
     void publicoPrivado(ActionEvent event) {
+    	//if (){}else{}// meter condicion para que si el radiobutton es uno u otro cambiar el booleano
     	if (rbPublico.isSelected()) {
     		tcSocios.setVisible(false);
     		tcFinanciacion.setVisible(true);
@@ -98,12 +100,18 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     		tcTrabajadores.setVisible(false);
     		tcCapacidad.setPrefWidth(238);
     	}
+    	rellenarTabla();
     }
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		listaRegistros= aDao.cargarAeropuertos();
-		listaFiltrada= aDao.cargarAeropuertos();
+		rellenarTabla();
+		tvTabla.setItems(listaFiltrada);
+	}
+
+	public void rellenarTabla() {
+		listaRegistros= aDao.cargarAeropuertos(bPrivado);
+		listaFiltrada= aDao.cargarAeropuertos(bPrivado);
 		
 		tcId.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("id"));
 		tcNombre.setCellValueFactory(new PropertyValueFactory<RegistroTabla, String>("nombre"));
@@ -115,9 +123,6 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 		tcCapacidad.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("capacidad"));
 		tcSocios.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("socios"));
 		tcFinanciacion.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("financiacion"));
-		tcTrabajadores.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("trabajadores"));
-		
-		tvTabla.setItems(listaFiltrada);
+		tcTrabajadores.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("num_trabajadores"));
 	}
-
 }
