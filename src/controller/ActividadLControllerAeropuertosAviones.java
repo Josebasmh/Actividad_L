@@ -135,11 +135,21 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     void aniadir(ActionEvent event) {
     	registro=new RegistroTabla();
     	crearVentanaAux();
+    	aDao.cargarAeropuertos(bPrivado);
     }
 
     @FXML
     void borrar(ActionEvent event) {
-
+    	try {
+    		RegistroTabla registrotabla= tvTabla.getSelectionModel().getSelectedItem();
+        	listaRegistros.remove(registrotabla);
+        	listaFiltrada.remove(registrotabla);
+        	aDao.borrarRegistro(registrotabla,rbPrivado.isSelected());
+        	aDao.cargarAeropuertos(bPrivado);	
+    	}catch(NullPointerException e) {
+    		ActividadLControllerLogeo.ventanaAlerta("E", "Seleccione un registro de la tabla. Si no hay, añada uno.");
+    	}
+    	
     }
 
     @FXML
@@ -154,6 +164,7 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     					registrotabla.getAnio(), registrotabla.getCapacidad(), registrotabla.getFinanciacion(),registrotabla.getNum_trabajadores());
     		}
     		crearVentanaAux();
+    		aDao.cargarAeropuertos(bPrivado);
     	}catch(NullPointerException e){
     		ActividadLControllerLogeo.ventanaAlerta("E", "Seleccione un registro de la tabla. Si no hay, añada uno.");
     	}

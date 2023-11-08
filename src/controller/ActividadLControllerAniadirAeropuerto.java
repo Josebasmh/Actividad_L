@@ -87,8 +87,8 @@ public class ActividadLControllerAniadirAeropuerto implements Initializable{
     void guardar(ActionEvent event) {  	
     	try {
     		comprobar();
-    		if (ActividadLControllerAeropuertosAviones.registro.getId()==0) {aniadir();}
-    		else {modificar();}
+    		if (ActividadLControllerAeropuertosAviones.registro.getId()==0) {aniadir(event);}
+    		else {modificar(event);}
     	}catch(NullPointerException e) {
     		Iterator<String> it= listaNulos.iterator();
     		String mensaje="";
@@ -109,13 +109,11 @@ public class ActividadLControllerAniadirAeropuerto implements Initializable{
 
     @FXML
     void publicoPrivado(ActionEvent event) {
-    	if (rbPrivado.isSelected()) {
-    		bPrivado=true;
+    	if (rbPrivado.isSelected()) {    		
     		tfTrabajadores.setVisible(false);
 			lbTrabajadores.setText("");
 			lbFinanciacion.setText("Nº Socios:");
-    	}else {
-    		bPrivado=false;
+    	}else {    		
     		tfTrabajadores.setVisible(true);
     		lbFinanciacion.setText("Financiación:");
     		lbTrabajadores.setText("Número de trabajadores:");
@@ -153,7 +151,7 @@ public class ActividadLControllerAniadirAeropuerto implements Initializable{
 		}
 	}
     
-    private void aniadir() {
+    private void aniadir(ActionEvent event) {
     	int id=aDao.generarID("aeropuertos");
     	String nombre=tfNombre.getText();
     	String pais=tfPais.getText();
@@ -162,20 +160,45 @@ public class ActividadLControllerAniadirAeropuerto implements Initializable{
     	Integer numero=Integer.parseInt(tfNumero.getText());
     	Integer anio=Integer.parseInt(tfAnio.getText());
     	Integer capacidad=Integer.parseInt(tfCapacidad.getText());
-    	if (bPrivado) {
+    	RegistroTabla rt;
+    	
+    	if (rbPrivado.isSelected()) {
     		Integer socios=Integer.parseInt(tfFinanciacion.getText());
-    		RegistroTabla rt=new RegistroTabla(id, nombre, pais, ciudad, calle, numero, anio, capacidad, socios);
-    		aDao.aniadirRegistro(rt,true);
+    		rt=new RegistroTabla(id, nombre, pais, ciudad, calle, numero, anio, capacidad, socios);
+    		
     	}else {
     		Integer financiacion=Integer.parseInt(tfFinanciacion.getText());
     		Integer trabajadores=Integer.parseInt(tfTrabajadores.getText());
-    		RegistroTabla rt=new RegistroTabla(id, nombre, pais, ciudad, calle, numero, anio, capacidad, financiacion, trabajadores);
-    		aDao.aniadirRegistro(rt, false);
+    		rt=new RegistroTabla(id, nombre, pais, ciudad, calle, numero, anio, capacidad, financiacion, trabajadores);
     	}
     	
-    }
-    private void modificar() {
+    	aDao.aniadirRegistro(rt,rbPrivado.isSelected());    	
     	
+    	cancelar(event);
+    }
+    private void modificar(ActionEvent event) {
+    	int id=r.getId();
+    	String nombre=tfNombre.getText();
+    	String pais=tfPais.getText();
+    	String ciudad=tfCiudad.getText();
+    	String calle=tfCalle.getText();
+    	Integer numero=Integer.parseInt(tfNumero.getText());
+    	Integer anio=Integer.parseInt(tfAnio.getText());
+    	Integer capacidad=Integer.parseInt(tfCapacidad.getText());
+    	RegistroTabla rt;
+    	
+    	if (rbPrivado.isSelected()) {
+    		Integer socios=Integer.parseInt(tfFinanciacion.getText());
+    		rt=new RegistroTabla(id, nombre, pais, ciudad, calle, numero, anio, capacidad, socios);
+    		
+    	}else {
+    		Integer financiacion=Integer.parseInt(tfFinanciacion.getText());
+    		Integer trabajadores=Integer.parseInt(tfTrabajadores.getText());
+    		rt=new RegistroTabla(id, nombre, pais, ciudad, calle, numero, anio, capacidad, financiacion, trabajadores);
+    	}
+    	aDao.modificarRegistro(rt,rbPrivado.isSelected());
+    	
+    	cancelar(event);
     }
     
     private void comprobar() {
