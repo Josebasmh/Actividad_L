@@ -62,4 +62,70 @@ public class AeropuertoDao {
 		}
 		return listaAeropuertos;
 	}
+	public int generarID(String tabla) {
+		int id=-1;
+		try {
+			conexion=new ConexionBD();
+			String consulta = "SELECT COUNT(*) FROM "+tabla+";";
+			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
+			ResultSet rs = pstmt.executeQuery();
+			System.out.println(rs.getInt(0));
+			System.out.println(rs.getInt(1));
+			id=rs.getInt(1)+1;
+			rs.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return id;
+		
+	}
+	public void aniadirRegistro(RegistroTabla rt,boolean bPrivado) {
+		//Datos tabla direccion
+		int idDirecciones = generarID("direcciones");
+		String pais=rt.getPais();
+		String ciudad=rt.getCiudad();
+		String calle=rt.getCalle();
+		Integer numero=rt.getNumero();
+		
+		//Datos tabla aeropuerto
+		int id=rt.getId();
+		String nombre=rt.getNombre();
+		Integer anio=rt.getAnio();
+		Integer capacidad=rt.getCapacidad();
+		
+		//Datos tabla privado/publico
+		String consultaPrivado="";
+		String consultaPublica="";
+		if (bPrivado) {
+			Integer num_socio=rt.getFinanciacion();
+			consultaPrivado="INSERT INTO aeropuertos_privados values("+id+","+num_socio+");";
+		}else {			
+			Integer financiacion=rt.getFinanciacion();
+			Integer trabajadores=rt.getNum_trabajadores();
+			consultaPublica="INSERT INTO aeropuertos_publicos values("+id+","+financiacion+","+trabajadores+")";
+		}
+				
+		String consultaDirecciones="INSERT INTO direcciones values("+idDirecciones+",'"+pais+"','"+ciudad+"','"+calle+"',"+numero+");";
+		String consultaAeropuertos="INSERT INTO aeropuertos values("+id+",'"+nombre+"',"+anio+","+capacidad+","+idDirecciones+",NULL);";
+		PreparedStatement pstmt;
+		try {
+			pstmt = conexion.getConexion().prepareStatement(consultaDirecciones);
+			ResultSet rs = pstmt.executeQuery();
+			pstmt = conexion.getConexion().prepareStatement(consultaAeropuertos);
+			rs = pstmt.executeQuery();
+			if(bPrivado) {
+				pstmt = conexion.getConexion().prepareStatement(consultaPrivado);
+				rs = pstmt.executeQuery();
+			}else {
+				pstmt = conexion.getConexion().prepareStatement(consultaPublica);
+				rs = pstmt.executeQuery();
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

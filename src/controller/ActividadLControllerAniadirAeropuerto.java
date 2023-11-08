@@ -2,8 +2,11 @@ package controller;
 
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 
+import dao.AeropuertoDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -66,8 +69,12 @@ public class ActividadLControllerAniadirAeropuerto implements Initializable{
     @FXML
     private TextField tfTrabajadores;
     
+    // Variables de clase
+    AeropuertoDao aDao= new AeropuertoDao();
     RegistroTabla r;
     boolean bPrivado;
+    private ArrayList<String>listaNulos=new ArrayList<String>();
+	private ArrayList<String>listaNumeros=new ArrayList<String>();
 
     @FXML
     void cancelar(ActionEvent event) {
@@ -77,12 +84,27 @@ public class ActividadLControllerAniadirAeropuerto implements Initializable{
     }
 
     @FXML
-    void guardar(ActionEvent event) {
-    	if (ActividadLControllerAeropuertosAviones.registro.getId()==0) {
-			aniadir();
-		}else {
-			modificar();
-		}
+    void guardar(ActionEvent event) {  	
+    	try {
+    		comprobar();
+    		if (ActividadLControllerAeropuertosAviones.registro.getId()==0) {aniadir();}
+    		else {modificar();}
+    	}catch(NullPointerException e) {
+    		Iterator<String> it= listaNulos.iterator();
+    		String mensaje="";
+    		while (it.hasNext()) {
+    			mensaje += it.next() + "\n";
+    		}
+    		ActividadLControllerLogeo.ventanaAlerta("E", mensaje);
+    	}catch(NumberFormatException e) {
+    		Iterator<String> it= listaNumeros.iterator();
+    		String mensaje="";
+    		while (it.hasNext()) {
+    			mensaje += it.next() + "\n";
+    		}
+    		ActividadLControllerLogeo.ventanaAlerta("E", mensaje);
+    		
+    	}
     }
 
     @FXML
@@ -93,6 +115,7 @@ public class ActividadLControllerAniadirAeropuerto implements Initializable{
 			lbTrabajadores.setText("");
 			lbFinanciacion.setText("Nº Socios:");
     	}else {
+    		bPrivado=false;
     		tfTrabajadores.setVisible(true);
     		lbFinanciacion.setText("Financiación:");
     		lbTrabajadores.setText("Número de trabajadores:");
@@ -130,7 +153,65 @@ public class ActividadLControllerAniadirAeropuerto implements Initializable{
 		}
 	}
     
-    private void aniadir() {}
-    private void modificar() {}
+    private void aniadir() {
+    	int id=aDao.generarID("aeropuertos");
+    	String nombre=tfNombre.getText();
+    	String pais=tfPais.getText();
+    	String ciudad=tfCiudad.getText();
+    	String calle=tfCalle.getText();
+    	Integer numero=Integer.parseInt(tfNumero.getText());
+    	Integer anio=Integer.parseInt(tfAnio.getText());
+    	Integer capacidad=Integer.parseInt(tfCapacidad.getText());
+    	if (bPrivado) {
+    		Integer socios=Integer.parseInt(tfFinanciacion.getText());
+    		RegistroTabla rt=new RegistroTabla(id, nombre, pais, ciudad, calle, numero, anio, capacidad, socios);
+    		aDao.aniadirRegistro(rt,true);
+    	}else {
+    		Integer financiacion=Integer.parseInt(tfFinanciacion.getText());
+    		Integer trabajadores=Integer.parseInt(tfTrabajadores.getText());
+    		RegistroTabla rt=new RegistroTabla(id, nombre, pais, ciudad, calle, numero, anio, capacidad, financiacion, trabajadores);
+    		aDao.aniadirRegistro(rt, false);
+    	}
     	
+    }
+    private void modificar() {
+    	
+    }
+    
+    private void comprobar() {
+    	listaNulos.clear();
+    	listaNumeros.clear();
+    	
+    	comprobarCamposNulos();
+    	comprobarCamposNumero();
+    	
+    	if (!listaNulos.isEmpty()) throw new NullPointerException();
+    	if (!listaNumeros.isEmpty()) throw new NumberFormatException();
+    }
+    private void comprobarCamposNulos() {
+
+    	if (tfNombre.getText().isEmpty()) listaNulos.add("Campo Nombre no contiene valor");
+    	if (tfPais.getText().isEmpty()) listaNulos.add("Campo País no contiene valor");
+    	if (tfCalle.getText().isEmpty()) listaNulos.add("Campo Ciudad no contiene valor");
+    	if (tfNumero.getText().isEmpty()) listaNulos.add("Campo Número no contiene valor");
+    	if (tfAnio.getText().isEmpty()) listaNulos.add("Campo Año de inauguración no contiene valor");
+    	if (tfCapacidad.getText().isEmpty()) listaNulos.add("Campo Capacidad no contiene valor");
+    	if (bPrivado) {
+    		if (tfFinanciacion.getText().isEmpty()) listaNulos.add("Campo Nº Socios no contiene valor");
+    	}else {
+    		if (tfFinanciacion.getText().isEmpty()) listaNulos.add("Campo Financiación no contiene valor");
+    		if (tfTrabajadores.getText().isEmpty()) listaNulos.add("Campo Número de trabajadores no contiene valor");
+    	}  	
+    }
+    private void comprobarCamposNumero() {
+    	if (!tfNumero.getText().matches("^-?[0-9]+([\\.,][0-9]+)?$")) listaNumeros.add("Campo Número debe ser mayor que 0");
+    	if (!tfAnio.getText().matches("^-?[0-9]+([\\.,][0-9]+)?$")) listaNumeros.add("Campo Año de inauguración debe ser mayor que 0");
+    	if (!tfCapacidad.getText().matches("^-?[0-9]+([\\.,][0-9]+)?$")) listaNumeros.add("Campo Capacidad debe ser mayor que 0");
+    	if (bPrivado) {
+    		if (!tfFinanciacion.getText().matches("^-?[0-9]+([\\.,][0-9]+)?$")) listaNumeros.add("Campo Nº Socios debe ser mayor que 0");
+    	}else {
+    		if (!tfFinanciacion.getText().matches("^-?[0-9]+([\\.,][0-9]+)?$")) listaNumeros.add("Campo Financiación debe ser mayor que 0");
+    		if (!tfTrabajadores.getText().matches("^-?[0-9]+([\\.,][0-9]+)?$")) listaNumeros.add("Campo Número de trabajadores debe ser mayor que 0");
+    	}    	
+    }
 }

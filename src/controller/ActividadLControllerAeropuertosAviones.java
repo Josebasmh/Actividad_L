@@ -19,6 +19,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
@@ -201,6 +202,7 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 			arg0.setScene(scene);
 			arg0.setMinWidth(420);
 			arg0.setMinHeight(600);
+			arg0.getIcons().add(new Image(getClass().getResource("/img/avion.png").toString()));
 			arg0.initModality(Modality.APPLICATION_MODAL);
 			arg0.show();
 		} catch (IOException e) {
