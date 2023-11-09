@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
@@ -24,6 +25,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.Avion;
 import model.RegistroTabla;
 
 public class ActividadLControllerAeropuertosAviones implements Initializable{
@@ -172,7 +174,39 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     
     @FXML
     void informacion(ActionEvent event) {
-
+    	try {
+    		RegistroTabla rt = tvTabla.getSelectionModel().getSelectedItem();
+        	String nombre = "Nombre: "+rt.getNombre();
+        	String pais = "Pais: "+rt.getPais();
+        	String direccion = "Dirección: "+rt.getCalle()+" "+rt.getNumero()+", "+rt.getCiudad();
+        	String anio = "Año de inauguracion: "+rt.getAnio();
+        	String capacidad = "Capacidad: "+rt.getCapacidad();
+        	String socio="";
+        	String financiacion="";
+        	String nTrabajadores="";
+        	if (rbPrivado.isSelected()) {
+        		socio = "Privado\nNº Socios: " + rt.getSocios();
+        	}else {
+        		financiacion = "Público\nFinanciación: " + rt.getFinanciacion();
+        		nTrabajadores= "Número de trabajadores: " + rt.getNum_trabajadores();
+        	}
+        	ObservableList<Avion>listaAvion = aDao.cargarAviones(rt.getId());
+        	Iterator<Avion>it=listaAvion.iterator();
+        	String txtAvion ="";
+        	while(it.hasNext()) {
+        		Avion a=it.next();
+        		txtAvion+=a.toString();
+        	}
+        	String msg=nombre+"\n"+pais+"\n"+direccion+"\n"+anio+"\n"+capacidad+"\nAviones:\n"+txtAvion+"\n";
+        	if(rbPrivado.isSelected()){
+        		msg+=socio;
+        	}else {
+        		msg+=financiacion+"\n"+nTrabajadores;
+        	}
+        	ActividadLControllerLogeo.ventanaAlerta("I", msg);
+    	}catch(NullPointerException e) {
+    		ActividadLControllerLogeo.ventanaAlerta("E", "Seleccione un registro.");
+    	}
     }    
     
 	@Override

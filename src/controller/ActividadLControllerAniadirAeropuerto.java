@@ -89,14 +89,14 @@ public class ActividadLControllerAniadirAeropuerto implements Initializable{
     		comprobar();
     		if (ActividadLControllerAeropuertosAviones.registro.getId()==0) {aniadir(event);}
     		else {modificar(event);}
-    	}catch(NullPointerException e) {
+    	}catch(NullPointerException e) {    		
     		Iterator<String> it= listaNulos.iterator();
     		String mensaje="";
     		while (it.hasNext()) {
     			mensaje += it.next() + "\n";
     		}
     		ActividadLControllerLogeo.ventanaAlerta("E", mensaje);
-    	}catch(NumberFormatException e) {
+    	}catch(NumberFormatException e) {    		
     		Iterator<String> it= listaNumeros.iterator();
     		String mensaje="";
     		while (it.hasNext()) {
@@ -197,7 +197,7 @@ public class ActividadLControllerAniadirAeropuerto implements Initializable{
     		rt=new RegistroTabla(id, nombre, pais, ciudad, calle, numero, anio, capacidad, financiacion, trabajadores);
     	}
     	aDao.modificarRegistro(rt,rbPrivado.isSelected());
-    	
+    	aDao.cargarAeropuertos(bPrivado);
     	cancelar(event);
     }
     

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import conexion.ConexionBD;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import model.Avion;
 import model.RegistroTabla;
 
 public class AeropuertoDao {
@@ -154,7 +155,7 @@ public class AeropuertoDao {
 		}
 	}
 	
-	public void modificarRegistro(RegistroTabla rt,boolean privado) {
+	public void modificarRegistro(RegistroTabla rt,boolean privado) {		
 		int id=-1;
 		String consultaAeropuerto="UPDATE aeropuertos SET nombre = '"+rt.getNombre()+"',anio_inauguracion = "+rt.getAnio()+",capacidad = "+rt.getCapacidad()+
 				" WHERE id = "+rt.getId()+";";
@@ -167,6 +168,7 @@ public class AeropuertoDao {
 		
 		PreparedStatement pstmt;
 		try {
+			conexion = new ConexionBD();
 			pstmt = conexion.getConexion().prepareStatement(consultaIdDirecciones);
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()) {
@@ -184,7 +186,29 @@ public class AeropuertoDao {
 			pstmt.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}		
+	}
+	public ObservableList<Avion>cargarAviones(int ida){
+		ObservableList<Avion>listaAvion= FXCollections.observableArrayList();
+		String consulta = "SELECT * FROM aviones WHERE id_aeropuerto = "+ida;
+		try {
+			conexion = new ConexionBD();
+			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {				
+				int id = rs.getInt("id");
+				String modelo = rs.getString("modelo");
+				Integer num_asiento = rs.getInt(3);
+				Integer velocidad = rs.getInt("velocidad_maxima");
+				Boolean activado = rs.getBoolean("activado");
+				Integer id_aeropuerto = rs.getInt("id_aeropuerto");
+				listaAvion.add(new Avion(id, modelo, num_asiento, velocidad, id_aeropuerto, activado));
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		
+		return listaAvion;
 	}
 }
