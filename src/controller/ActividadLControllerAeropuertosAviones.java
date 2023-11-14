@@ -149,8 +149,8 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
         	aDao.borrarRegistro(registrotabla,rbPrivado.isSelected());
         	aDao.cargarAeropuertos(bPrivado);	
     	}catch(NullPointerException e) {
-    		ActividadLControllerLogeo.ventanaAlerta("E", "Seleccione un registro de la tabla. Si no hay, añada uno.");
-    	}
+    		ActividadLControllerLogeo.ventanaAlerta("E", "Seleccione un registro de la tabla. Si no hay, añada uno");
+       	}
     	
     }
 
