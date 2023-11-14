@@ -4,7 +4,8 @@ import java.util.Objects;
 
 public class RegistroTabla {
 
-	private int id,anio,capacidad,numero,socios,financiacion,numeroTrabajadores;
+	private int id;
+	private Integer capacidad,numero,anio,socios,financiacion,num_trabajadores;
 	private String nombre,pais,ciudad,calle;
 	
 	/**
@@ -19,16 +20,18 @@ public class RegistroTabla {
 	 * @param c capacidad
 	 * @param ns Nº socios
 	 */
-	public RegistroTabla(int i,String no,String p,String ci,String ca,int nu,int a, int c,int ns) {
-		id=i;
-		nombre=no;
-		pais=p;
-		ciudad=ci;
-		calle=ca;
-		numero=nu;
-		anio=a;
-		capacidad=c;
-		socios=ns;
+	public RegistroTabla(int i,String no,String p,String ci,String ca,Integer nu,Integer a,Integer c,Integer ns) {
+		setId(i);
+		setNombre(no);
+		setPais(p);
+		setCiudad(ci);
+		setCalle(ca);
+		setNumero(nu);
+		setAnio(a);
+		setCapacidad(c);
+		setSocios(ns);
+		setFinanciacion(null);
+		setNum_trabajadores(null);
 	}
 	/**
 	 * Constructor para registro de aeropuerto público.
@@ -43,16 +46,23 @@ public class RegistroTabla {
 	 * @param f financiación
 	 * @param t Nº trabajadores
 	 */
-	public RegistroTabla(int i,String no,String p,String ci,String ca,int nu,int a,int c,int f,int t) {
-		id=i;
-		nombre=no;
-		pais=p;
-		ciudad=ci;
-		calle=ca;
-		numero=nu;
-		anio=a;
-		capacidad=c;
+	public RegistroTabla(int i,String no,String p,String ci,String ca,Integer nu,Integer a,Integer c,Integer f,Integer t) {
+		setId(i);
+		setNombre(no);
+		setPais(p);
+		setCiudad(ci);
+		setCalle(ca);
+		setNumero(nu);
+		setAnio(a);
+		setCapacidad(c);
+		setSocios(null);
+		setFinanciacion(f);
+		setNum_trabajadores(t);
 	}
+	
+	public RegistroTabla() {
+	}
+	
 	// Metodos getter y setter
 	public int getId() {
 		return id;
@@ -60,16 +70,17 @@ public class RegistroTabla {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getAnio() {
+	
+	public Integer getAnio() {
 		return anio;
 	}
-	public void setAnio(int anio) {
-		this.anio = anio;
+	public void setAnio(Integer a) {
+		this.anio = a;
 	}
-	public int getCapacidad() {
+	public Integer getCapacidad() {
 		return capacidad;
 	}
-	public void setCapacidad(int capacidad) {
+	public void setCapacidad(Integer capacidad) {
 		this.capacidad = capacidad;
 	}
 	public String getNombre() {
@@ -78,23 +89,24 @@ public class RegistroTabla {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public int getSocios() {
+
+	public Integer getSocios() {
 		return socios;
 	}
-	public void setSocios(int socios) {
-		this.socios = socios;
-	}
-	public int getFinanciacion() {
+	public Integer getFinanciacion() {
 		return financiacion;
 	}
-	public void setFinanciacion(int financiacion) {
+	public void setFinanciacion(Integer financiacion) {
 		this.financiacion = financiacion;
 	}
-	public int getNumeroTrabajadores() {
-		return numeroTrabajadores;
+	public void setSocios(Integer socios) {
+		this.socios = socios;
 	}
-	public void setNumeroTrabajadores(int numeroTrabajadores) {
-		this.numeroTrabajadores = numeroTrabajadores;
+	public Integer getNum_trabajadores() {
+		return num_trabajadores;
+	}
+	public void setNum_trabajadores(Integer num_trabajadores) {
+		this.num_trabajadores = num_trabajadores;
 	}
 	public String getPais() {
 		return pais;
@@ -114,7 +126,12 @@ public class RegistroTabla {
 	public void setCalle(String calle) {
 		this.calle = calle;
 	}
-	
+	public Integer getNumero() {
+		return numero;
+	}
+	public void setNumero(Integer numero) {
+		this.numero = numero;
+	}
 	
 	@Override
 	public int hashCode() {
@@ -133,6 +150,10 @@ public class RegistroTabla {
 		return id == other.id;
 	}
 	
-	
-	
+	@Override
+	public String toString() {
+		return "RegistroTabla [id=" + id + ", capacidad=" + capacidad + ", numero=" + numero + ", anio=" + anio
+				+ ", socios=" + socios + ", financiacion=" + financiacion + ", num_trabajadores=" + num_trabajadores
+				+ ", nombre=" + nombre + ", pais=" + pais + ", ciudad=" + ciudad + ", calle=" + calle + "]";
+	}
 }

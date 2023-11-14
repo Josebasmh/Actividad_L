@@ -1,16 +1,5 @@
 package controller;
 
-
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -44,7 +34,6 @@ public class ActividadLControllerLogeo implements Initializable{
      * ventana de error.
      * @param event
      */
-
     @FXML
     void logear(ActionEvent event) {
     	String sUsuario = tfUsuario.getText();
@@ -70,7 +59,6 @@ public class ActividadLControllerLogeo implements Initializable{
 	 * @param tipoAlerta Error("E") o Información("I").
 	 * @param mensaje Mensaje a insertar en la ventana.
 	 */
-
 	static void ventanaAlerta(String tipoAlerta, String mensaje) {
 		Alert alert = null;
 		switch (tipoAlerta) {
@@ -83,7 +71,6 @@ public class ActividadLControllerLogeo implements Initializable{
         alert.setContentText(mensaje);
         alert.showAndWait();
 	}
-
 	/**
 	 * Crea la ventana de listadoAeropuertos.fxml.
 	 * Captura IOException.
@@ -104,6 +91,7 @@ public class ActividadLControllerLogeo implements Initializable{
 			arg0.setScene(scene);
 			arg0.setMinWidth(1020);
 			arg0.setMinHeight(600);
+			arg0.getIcons().add(new Image(getClass().getResource("/img/avion.png").toString()));
 			arg0.initModality(Modality.APPLICATION_MODAL);
 			arg0.show();
 		} catch (IOException e) {

@@ -16,7 +16,8 @@ public class Main extends Application{
 	@Override
 	public void start(Stage stage) throws Exception {
 		try {
-			root = (FlowPane)FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
+
+			root = (FlowPane)FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
 			stage.setTitle("AVIONES - LOGIN");
 			Scene scene = new Scene(root,410,210);
 			stage.setScene(scene);

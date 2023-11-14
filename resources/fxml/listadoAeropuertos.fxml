@@ -21,12 +21,19 @@
         <menus>
           <Menu fx:id="menuAeropuertos" mnemonicParsing="false" text="Aeropuertos">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+                  <MenuItem mnemonicParsing="false" onAction="#aniadir" text="Añadir" />
+                  <MenuItem mnemonicParsing="false" onAction="#editar" text="Editar" />
+              <MenuItem mnemonicParsing="false" onAction="#borrar" text="Borrar" />
+                  <MenuItem mnemonicParsing="false" onAction="#informacion" text="Mostrar Información" />
+
             </items>
           </Menu>
           <Menu fx:id="menuAviones" mnemonicParsing="false" text="Aviones">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem mnemonicParsing="false" onAction="#aniadir" text="Añadir" />
+                  <MenuItem mnemonicParsing="false" onAction="#activarDesactivar" text="Activar/Desactivar" />
+                  <MenuItem mnemonicParsing="false" onAction="#borrar" text="Borrar" />
+                  <MenuItem mnemonicParsing="false" text="Ayuda" />
             </items>
           </Menu>
         </menus>
