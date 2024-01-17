@@ -70,9 +70,9 @@ public class ActividadLControllerAniadirAeropuerto implements Initializable{
     private TextField tfTrabajadores;
     
     // Variables de clase
-    AeropuertoDao aDao= new AeropuertoDao();
-    RegistroTabla r;
-    boolean bPrivado;
+    private AeropuertoDao aDao= new AeropuertoDao();
+    private RegistroTabla r;
+    private boolean bPrivado;
     private ArrayList<String>listaNulos=new ArrayList<String>();
 	private ArrayList<String>listaNumeros=new ArrayList<String>();
 
@@ -125,6 +125,7 @@ public class ActividadLControllerAniadirAeropuerto implements Initializable{
 		// Creación de variables para no escribir toda esa parrafada. 
 		r=ActividadLControllerAeropuertosAviones.registro;
 		bPrivado= ActividadLControllerAeropuertosAviones.bPrivado;
+		
 		if (r.getId()!=0) {
 			tfNombre.setText(r.getNombre());
 			tfPais.setText(r.getPais());
@@ -167,7 +168,7 @@ public class ActividadLControllerAniadirAeropuerto implements Initializable{
     		rt=new RegistroTabla(id, nombre, pais, ciudad, calle, numero, anio, capacidad, socios);
     		
     	}else {
-    		Integer financiacion=Integer.parseInt(tfFinanciacion.getText());
+    		Float financiacion=Float.valueOf(tfFinanciacion.getText());
     		Integer trabajadores=Integer.parseInt(tfTrabajadores.getText());
     		rt=new RegistroTabla(id, nombre, pais, ciudad, calle, numero, anio, capacidad, financiacion, trabajadores);
     	}
@@ -192,7 +193,7 @@ public class ActividadLControllerAniadirAeropuerto implements Initializable{
     		rt=new RegistroTabla(id, nombre, pais, ciudad, calle, numero, anio, capacidad, socios);
     		
     	}else {
-    		Integer financiacion=Integer.parseInt(tfFinanciacion.getText());
+    		Float financiacion=Float.valueOf(tfFinanciacion.getText());
     		Integer trabajadores=Integer.parseInt(tfTrabajadores.getText());
     		rt=new RegistroTabla(id, nombre, pais, ciudad, calle, numero, anio, capacidad, financiacion, trabajadores);
     	}

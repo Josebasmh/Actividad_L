@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.ResourceBundle;
 
 import dao.AeropuertoDao;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -85,26 +86,14 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     private TextField tfFiltro;
     
     // Variables de clase
-    AeropuertoDao aDao= new AeropuertoDao();
-    static ObservableList<RegistroTabla>listaRegistros;
-    static ObservableList<RegistroTabla>listaFiltrada;
+    private AeropuertoDao aDao= new AeropuertoDao();    
     static RegistroTabla registro; 
     static boolean bPrivado=true;
     
 
     @FXML
     void filtrarPorNombre(KeyEvent event) {
-    	String sFiltro = tfFiltro.getText(); 
-    	
-    	// Iterador para la lista y se añade a una lista auxiliar para mostrar en la tabla
-    	Iterator<RegistroTabla>it = listaRegistros.iterator();
-    	listaFiltrada.clear();    	
-    	while(it.hasNext()) {
-    		RegistroTabla rt = it.next();
-    		if (rt.getNombre().contains(sFiltro)) {
-    			listaFiltrada.add(rt);
-    		}
-    	}
+    	tvTabla.setItems(aDao.filtrar(bPrivado,tfFiltro.getText()));
     }
 
     @FXML
@@ -137,17 +126,15 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     void aniadir(ActionEvent event) {
     	registro=new RegistroTabla();
     	crearVentanaAux();
-    	aDao.cargarAeropuertos(bPrivado);
+    	tvTabla.setItems(aDao.cargarAeropuertos(bPrivado));
     }
 
     @FXML
-    void borrar(ActionEvent event) {
+    void borrar(ActionEvent event) {    	
     	try {
     		RegistroTabla registrotabla= tvTabla.getSelectionModel().getSelectedItem();
-        	listaRegistros.remove(registrotabla);
-        	listaFiltrada.remove(registrotabla);
         	aDao.borrarRegistro(registrotabla,rbPrivado.isSelected());
-        	aDao.cargarAeropuertos(bPrivado);	
+        	tvTabla.setItems(aDao.cargarAeropuertos(bPrivado));
     	}catch(NullPointerException e) {
     		ActividadLControllerLogeo.ventanaAlerta("E", "Seleccione un registro de la tabla. Si no hay, añada uno");
        	}
@@ -166,7 +153,7 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     					registrotabla.getAnio(), registrotabla.getCapacidad(), registrotabla.getFinanciacion(),registrotabla.getNum_trabajadores());
     		}
     		crearVentanaAux();
-    		aDao.cargarAeropuertos(bPrivado);
+    		tvTabla.setItems(aDao.cargarAeropuertos(bPrivado));
     	}catch(NullPointerException e){
     		ActividadLControllerLogeo.ventanaAlerta("E", "Seleccione un registro de la tabla. Si no hay, añada uno.");
     	}
@@ -215,8 +202,7 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 	}
 
 	public void rellenarTabla() {
-		listaRegistros= aDao.cargarAeropuertos(bPrivado);
-		listaFiltrada= aDao.cargarAeropuertos(bPrivado);
+		ObservableList<RegistroTabla>listaRegistros = aDao.cargarAeropuertos(bPrivado);	
 		
 		tcId.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("id"));
 		tcNombre.setCellValueFactory(new PropertyValueFactory<RegistroTabla, String>("nombre"));
@@ -232,7 +218,7 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 			tcTrabajadores.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("num_trabajadores"));
 			tcFinanciacion.setCellValueFactory(new PropertyValueFactory<RegistroTabla, Integer>("financiacion"));
 		}
-		tvTabla.setItems(listaFiltrada);
+		tvTabla.setItems(listaRegistros);
 	}
 	
 	void crearVentanaAux() {

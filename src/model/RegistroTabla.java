@@ -5,8 +5,9 @@ import java.util.Objects;
 public class RegistroTabla {
 
 	private int id;
-	private Integer capacidad,numero,anio,socios,financiacion,num_trabajadores;
+	private Integer capacidad,numero,anio,socios,num_trabajadores;
 	private String nombre,pais,ciudad,calle;
+	private Float financiacion;
 	
 	/**
 	 * Constructor para registro de aeropuerto privado.
@@ -46,7 +47,7 @@ public class RegistroTabla {
 	 * @param f financiación
 	 * @param t Nº trabajadores
 	 */
-	public RegistroTabla(int i,String no,String p,String ci,String ca,Integer nu,Integer a,Integer c,Integer f,Integer t) {
+	public RegistroTabla(int i,String no,String p,String ci,String ca,Integer nu,Integer a,Integer c,Float f,Integer t) {
 		setId(i);
 		setNombre(no);
 		setPais(p);
@@ -93,10 +94,10 @@ public class RegistroTabla {
 	public Integer getSocios() {
 		return socios;
 	}
-	public Integer getFinanciacion() {
+	public Float getFinanciacion() {
 		return financiacion;
 	}
-	public void setFinanciacion(Integer financiacion) {
+	public void setFinanciacion(Float financiacion) {
 		this.financiacion = financiacion;
 	}
 	public void setSocios(Integer socios) {
