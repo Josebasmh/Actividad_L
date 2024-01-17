@@ -20,26 +20,24 @@ public class AeropuertoDao {
 	 * @return ObservableList<RegistroTabla>
 	 */
 	public ObservableList<RegistroTabla> cargarAeropuertos(boolean bPrivado){
-		ObservableList<RegistroTabla> listaAeropuertos = FXCollections.observableArrayList();
+		ObservableList<RegistroTabla> listaRegistros = FXCollections.observableArrayList();
 		try {
 			conexion=new ConexionBD();
 			String consulta = "";
 			if (bPrivado) {
-				consulta= "SELECT aeropuertos.id,nombre,pais,ciudad,calle,numero,anio_inauguracion,capacidad,numero_socios "
-						+ "FROM aeropuertos_privados,aeropuertos,direcciones "
-						+ "WHERE aeropuertos.id=direcciones.id "
-						+ "AND aeropuertos.id=aeropuertos_privados.id_aeropuerto;";	
+				consulta= "SELECT * FROM aeropuertos a"
+						+ " LEFT JOIN aeropuertos_privados ap on ap.id_aeropuerto = a.id "
+						+ " LEFT JOIN direcciones d ON d.id=a.id_direccion;";	
 			}else {
-				consulta= "SELECT aeropuertos.id,nombre,pais,ciudad,calle,numero,anio_inauguracion,capacidad,financiacion,num_trabajadores "
-						+ "FROM aeropuertos_publicos,aeropuertos,direcciones "
-						+ "WHERE aeropuertos.id=direcciones.id "
-						+ "AND aeropuertos.id=aeropuertos_publicos.id_aeropuerto;";
+				consulta= "SELECT * FROM aeropuertos a "
+						+ " LEFT JOIN aeropuertos_publicos ap on ap.id_aeropuerto = a.id "
+						+ " LEFT JOIN direcciones d ON d.id=a.id_direccion;";
 			}
 			
 			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
 			ResultSet rs = pstmt.executeQuery();   				
 			while (rs.next()) {
-				int nid=rs.getInt("id");
+				int nid=rs.getInt("a.id");
 				String snombre=rs.getString("nombre");
 				String spais = rs.getString("pais");
 				String sciudad=rs.getString("ciudad");
@@ -52,16 +50,16 @@ public class AeropuertoDao {
 					Integer nsocios=rs.getInt("numero_socios");
 					rt = new RegistroTabla(nid, snombre, spais, sciudad, scalle, nnumero, nanio, ncapacidad, nsocios);
 				}else {
-					Integer nfinanciacion=rs.getInt("financiacion");
+					Float nfinanciacion=rs.getFloat("financiacion");
 					Integer ntrabajadores=rs.getInt("num_trabajadores");
 					rt = new RegistroTabla(nid, snombre, spais, sciudad, scalle, nnumero, nanio, ncapacidad, nfinanciacion,ntrabajadores);
 				}
-				listaAeropuertos.add(rt);
+				listaRegistros.add(rt);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return listaAeropuertos;
+		return listaRegistros;
 	}
 	
 	public int generarID(String tabla) {
@@ -102,7 +100,7 @@ public class AeropuertoDao {
 			int num_socio=rt.getSocios();
 			consultaPrivado="INSERT INTO aeropuertos_privados values("+id+","+num_socio+");";
 		}else {			
-			Integer financiacion=rt.getFinanciacion();
+			Float financiacion=rt.getFinanciacion();
 			Integer trabajadores=rt.getNum_trabajadores();
 			consultaPublica="INSERT INTO aeropuertos_publicos values("+id+","+financiacion+","+trabajadores+")";
 		}
@@ -211,5 +209,43 @@ public class AeropuertoDao {
 			e.printStackTrace();
 		}
 		return listaAvion;
+	}
+
+	public ObservableList<RegistroTabla> filtrar(boolean bPrivado, String sNombre) {
+		ObservableList<RegistroTabla>listaRegistros = FXCollections.observableArrayList();
+		String consulta="";
+		if (bPrivado) {
+			consulta = "SELECT * FROM aeropuertos a LEFT JOIN aeropuertos_privados ap on ap.id_aeropuerto = a.id LEFT JOIN direcciones d ON d.id=a.id_direccion"+
+					" WHERE nombre LIKE '%"+sNombre+"%'";	
+		}else {
+			consulta = "SELECT * FROM aeropuertos a LEFT JOIN aeropuertos_publicos ap on ap.id_aeropuerto = a.id LEFT JOIN direcciones d ON d.id=a.id_direccion"+
+					" WHERE nombre LIKE '%"+sNombre+"%'";
+		}
+		try {
+			conexion = new ConexionBD();
+			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				int idAeropuertos = rs.getInt("a.id");
+				String nombre = rs.getString("nombre");
+				Integer anio = rs.getInt("anio_inauguracion");
+				Integer capacidad = rs.getInt("capacidad");
+				String pais = rs.getString("pais");
+				String ciudad = rs.getString("ciudad");
+				String calle = rs.getString("calle");
+				Integer numero = rs.getInt("numero");
+				RegistroTabla rt;
+				if (bPrivado) {
+					Integer numero_socios = rs.getInt("numero_socios");
+					rt = new RegistroTabla(idAeropuertos, nombre, pais, ciudad, calle, numero, anio, capacidad, numero_socios);					
+				}else {
+					Float financiacion = rs.getFloat("financiacion");
+					Integer num_trabajadores = rs.getInt("num_trabajadores");
+					rt = new RegistroTabla(idAeropuertos, nombre, pais, ciudad, calle, numero, anio, capacidad, financiacion, num_trabajadores);
+				}
+				listaRegistros.add(rt);
+			}			
+		}catch(Exception e) {}
+		return listaRegistros;
 	}
 }
