@@ -2,12 +2,10 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
 import dao.AeropuertoDao;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -120,7 +118,7 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     
     @FXML
     void activarDesactivar(ActionEvent event) {
-
+    	crearVentanaAux("activarDesactivar","ACTIVAR/DESACTIVAR AVIÓN",600,400);
     }
 
     @FXML

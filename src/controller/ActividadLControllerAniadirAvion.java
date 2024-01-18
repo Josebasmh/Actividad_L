@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import dao.AeropuertoDao;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,7 +16,6 @@ import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 import model.Aeropuerto;
 import model.Avion;
-import model.RegistroTabla;
 
 public class ActividadLControllerAniadirAvion implements Initializable{
 

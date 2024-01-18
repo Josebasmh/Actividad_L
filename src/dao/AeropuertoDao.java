@@ -215,7 +215,7 @@ public class AeropuertoDao {
 	}
 	public ObservableList<Avion>cargarAviones(int ida){
 		ObservableList<Avion>listaAvion= FXCollections.observableArrayList();
-		String consulta = "SELECT * FROM aviones WHERE id_aeropuerto = "+ida;
+		String consulta = "SELECT * FROM aviones WHERE id_aeropuerto = "+ida+";";
 		try {
 			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
 			ResultSet rs = pstmt.executeQuery();
@@ -299,5 +299,39 @@ public class AeropuertoDao {
 			e.printStackTrace();
 			return false;
 		}		
+	}
+
+	public Avion filtrarAvion(String modelo) {
+		Avion a = null;
+		String consulta = "SELECT * FROM aviones WHERE modelo = '"+modelo+"';";
+		try {
+			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {				
+				int id = rs.getInt("id");
+				Integer num_asiento = rs.getInt(3);
+				Integer velocidad = rs.getInt("velocidad_maxima");
+				Boolean activado = rs.getBoolean("activado");
+				Integer id_aeropuerto = rs.getInt("id_aeropuerto");
+				a = new Avion(id, modelo, num_asiento, velocidad, id_aeropuerto, activado);
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {}
+		return a;		
+	}
+
+	public boolean modificarAvion(Integer id_aeropuerto, String modelo, boolean activado) {
+		Integer nActivado=0;
+		if (activado) {nActivado=1;}
+		String consulta = "UPDATE aviones SET activado = "+nActivado+" WHERE modelo = '"+modelo+"' AND id_aeropuerto = "+id_aeropuerto+";";
+		try {
+			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
+			pstmt.executeUpdate();
+			pstmt.close();
+			return true;
+		} catch (SQLException e) {
+			return false;			
+		}
 	}	
 }
