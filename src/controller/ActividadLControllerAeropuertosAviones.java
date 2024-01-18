@@ -125,8 +125,13 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     @FXML
     void aniadir(ActionEvent event) {
     	registro=new RegistroTabla();
-    	crearVentanaAux();
+    	crearVentanaAux("aniadirAeropuerto","AÑADIR AEROPUERTO",400,600);
     	tvTabla.setItems(aDao.cargarAeropuertos(bPrivado));
+    }
+    
+    @FXML
+    void aniadirAvion(ActionEvent event) {
+    	crearVentanaAux("aniadirAvion","AÑADIR AVIÓN",600,400);
     }
 
     @FXML
@@ -140,6 +145,11 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
        	}
     	
     }
+    
+    @FXML
+    void borrarAvion(ActionEvent event) {
+
+    }
 
     @FXML
     void editar(ActionEvent event) {
@@ -152,7 +162,7 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     			registro=new RegistroTabla(registrotabla.getId(),registrotabla.getNombre(), registrotabla.getPais(), registrotabla.getCiudad(), registrotabla.getCalle(), registrotabla.getNumero(),
     					registrotabla.getAnio(), registrotabla.getCapacidad(), registrotabla.getFinanciacion(),registrotabla.getNum_trabajadores());
     		}
-    		crearVentanaAux();
+    		crearVentanaAux("aniadirAeropuerto","MODIFICAR AEROPUERTO",1020,600);
     		tvTabla.setItems(aDao.cargarAeropuertos(bPrivado));
     	}catch(NullPointerException e){
     		ActividadLControllerLogeo.ventanaAlerta("E", "Seleccione un registro de la tabla. Si no hay, añada uno.");
@@ -221,18 +231,18 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 		tvTabla.setItems(listaRegistros);
 	}
 	
-	void crearVentanaAux() {
+	void crearVentanaAux(String fxml, String titulo,Integer anchura,Integer altura) {
 		
 		// Creación de ventana
 		Stage arg0 = new Stage();
-		arg0.setTitle("AÑADIR AVIONES"); 
+		arg0.setTitle(titulo); 
 		FlowPane aux;
 		try {
-			aux = (FlowPane)FXMLLoader.load(getClass().getResource("/fxml/aniadirAeropuerto.fxml"));
-			Scene scene = new Scene(aux,420,600);
+			aux = (FlowPane)FXMLLoader.load(getClass().getResource("/fxml/"+fxml+".fxml"));
+			Scene scene = new Scene(aux,anchura,altura);
 			arg0.setScene(scene);
-			arg0.setMinWidth(420);
-			arg0.setMinHeight(600);
+			arg0.setMinWidth(anchura);
+			arg0.setMinHeight(altura);
 			arg0.getIcons().add(new Image(getClass().getResource("/img/avion.png").toString()));
 			arg0.initModality(Modality.APPLICATION_MODAL);
 			arg0.show();
