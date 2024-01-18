@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Menu;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
@@ -87,7 +88,7 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     
     // Variables de clase
     private AeropuertoDao aDao= new AeropuertoDao();    
-    static RegistroTabla registro; 
+    static RegistroTabla registro= new RegistroTabla(); 
     static boolean bPrivado=true;
     
 
@@ -124,7 +125,7 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 
     @FXML
     void aniadir(ActionEvent event) {
-    	registro=new RegistroTabla();
+    	registro.setId(0);
     	crearVentanaAux("aniadirAeropuerto","AÑADIR AEROPUERTO",400,600);
     	tvTabla.setItems(aDao.cargarAeropuertos(bPrivado));
     }
@@ -250,5 +251,17 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 			System.out.println("La ventana no se abrió correctamente.");
 			e.printStackTrace();
 		}
+	}
+	static void ventanaAlerta(String tipoAlerta, String mensaje) {
+		Alert alert = null;
+		switch (tipoAlerta) {
+			case ("E"):
+				alert = new Alert(Alert.AlertType.ERROR);
+				break;
+			case ("I"):
+				alert = new Alert(Alert.AlertType.INFORMATION);
+		}
+        alert.setContentText(mensaje);
+        alert.showAndWait();
 	}
 }
