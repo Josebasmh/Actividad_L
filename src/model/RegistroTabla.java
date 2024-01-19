@@ -61,8 +61,7 @@ public class RegistroTabla {
 		setNum_trabajadores(t);
 	}
 	
-	public RegistroTabla() {
-	}
+	public RegistroTabla() {}
 	
 	// Metodos getter y setter
 	public int getId() {

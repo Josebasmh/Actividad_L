@@ -7,12 +7,19 @@ import java.sql.SQLException;
 import conexion.ConexionBD;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import model.Aeropuerto;
 import model.Avion;
 import model.RegistroTabla;
 
 public class AeropuertoDao {
 
 	private ConexionBD conexion;
+	
+	public AeropuertoDao() {
+		try {
+			conexion = new ConexionBD();
+		} catch (SQLException e) {}
+	}
 	
 	/**
 	 * Carga los datos de la tabla dependiendo si elegimos aeropuertos publicos o privados.
@@ -21,17 +28,16 @@ public class AeropuertoDao {
 	 */
 	public ObservableList<RegistroTabla> cargarAeropuertos(boolean bPrivado){
 		ObservableList<RegistroTabla> listaRegistros = FXCollections.observableArrayList();
-		try {
-			conexion=new ConexionBD();
+		try {			
 			String consulta = "";
 			if (bPrivado) {
-				consulta= "SELECT * FROM aeropuertos a"
-						+ " LEFT JOIN aeropuertos_privados ap on ap.id_aeropuerto = a.id "
-						+ " LEFT JOIN direcciones d ON d.id=a.id_direccion;";	
+				consulta= "SELECT * FROM aeropuertos a,aeropuertos_privados ap,direcciones d"
+						+ " WHERE a.id=ap.id_aeropuerto"
+						+ " AND d.id=a.id_direccion;";	
 			}else {
-				consulta= "SELECT * FROM aeropuertos a "
-						+ " LEFT JOIN aeropuertos_publicos ap on ap.id_aeropuerto = a.id "
-						+ " LEFT JOIN direcciones d ON d.id=a.id_direccion;";
+				consulta= "SELECT * FROM aeropuertos a,aeropuertos_publicos ap,direcciones d "
+						+ " WHERE ap.id_aeropuerto = a.id "
+						+ " AND d.id=a.id_direccion;";
 			}
 			
 			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
@@ -62,10 +68,31 @@ public class AeropuertoDao {
 		return listaRegistros;
 	}
 	
+	public ObservableList<Aeropuerto> cargarTodosAeropuertos() {
+		ObservableList<Aeropuerto> listaAeropuerto = FXCollections.observableArrayList();
+		String consulta = "SELECT * FROM aeropuertos;";
+		PreparedStatement ps;
+		try {
+			ps = conexion.getConexion().prepareStatement(consulta);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String nombre = rs.getString("nombre");
+				Integer anio = rs.getInt("anio_inauguracion");
+				Integer capacidad = rs.getInt("capacidad");
+				Integer idDireccion = rs.getInt("id_direccion");
+				Aeropuerto a = new Aeropuerto(id, nombre, anio, capacidad, idDireccion);
+				listaAeropuerto.add(a);
+			}
+		} catch (SQLException e) {}
+		return listaAeropuerto;
+		
+		
+	}
+	
 	public int generarID(String tabla) {
 		int id=-1;
 		try {
-			conexion=new ConexionBD();
 			String consulta = "SELECT COUNT(*) FROM "+tabla+";";
 			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
 			ResultSet rs = pstmt.executeQuery();
@@ -124,7 +151,7 @@ public class AeropuertoDao {
 		}
 	}
 	
-	public void borrarRegistro(RegistroTabla r,boolean bPrivado) {
+	public void borrarRegistro(RegistroTabla r,boolean bPrivado) throws SQLException {
 		String consultaIdDireccion = "SELECT id_direccion FROM aeropuertos WHERE id = " + r.getId() + ";";
 		String consultaAeropuerto = "DELETE FROM aeropuertos WHERE id = " + r.getId() + ";";
 		String consultaPri = "DELETE FROM aeropuertos_privados WHERE id_aeropuerto = " + r.getId() + ";";
@@ -132,26 +159,23 @@ public class AeropuertoDao {
 		
 		PreparedStatement pstmt;
 		int id=-1;
-		try {
-			pstmt = conexion.getConexion().prepareStatement(consultaIdDireccion);
-			ResultSet rs = pstmt.executeQuery();
-			while(rs.next()) {
-				id=rs.getInt("id_direccion");
-			}
-			rs.close();
-			if(bPrivado) {				
-				pstmt.executeUpdate(consultaPri);
-			}else {
-				pstmt.executeUpdate(consultaPub);
-			}
-			
-			pstmt.executeUpdate(consultaAeropuerto);
-			String consultaDireccion = "DELETE FROM direcciones WHERE id = " + id + ";";
-			pstmt.executeUpdate(consultaDireccion);
-			pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
+	
+		pstmt = conexion.getConexion().prepareStatement(consultaIdDireccion);
+		ResultSet rs = pstmt.executeQuery();
+		while(rs.next()) {
+			id=rs.getInt("id_direccion");
 		}
+		rs.close();
+		if(bPrivado) {				
+			pstmt.executeUpdate(consultaPri);
+		}else {
+			pstmt.executeUpdate(consultaPub);
+		}
+		
+		pstmt.executeUpdate(consultaAeropuerto);
+		String consultaDireccion = "DELETE FROM direcciones WHERE id = " + id + ";";
+		pstmt.executeUpdate(consultaDireccion);
+		pstmt.close();
 	}
 	
 	public void modificarRegistro(RegistroTabla rt,boolean privado) {		
@@ -167,7 +191,6 @@ public class AeropuertoDao {
 		
 		PreparedStatement pstmt;
 		try {
-			conexion = new ConexionBD();
 			pstmt = conexion.getConexion().prepareStatement(consultaIdDirecciones);
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()) {
@@ -189,9 +212,8 @@ public class AeropuertoDao {
 	}
 	public ObservableList<Avion>cargarAviones(int ida){
 		ObservableList<Avion>listaAvion= FXCollections.observableArrayList();
-		String consulta = "SELECT * FROM aviones WHERE id_aeropuerto = "+ida;
+		String consulta = "SELECT * FROM aviones WHERE id_aeropuerto = "+ida+";";
 		try {
-			conexion = new ConexionBD();
 			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()) {				
@@ -215,14 +237,13 @@ public class AeropuertoDao {
 		ObservableList<RegistroTabla>listaRegistros = FXCollections.observableArrayList();
 		String consulta="";
 		if (bPrivado) {
-			consulta = "SELECT * FROM aeropuertos a LEFT JOIN aeropuertos_privados ap on ap.id_aeropuerto = a.id LEFT JOIN direcciones d ON d.id=a.id_direccion"+
-					" WHERE nombre LIKE '%"+sNombre+"%'";	
+			consulta = "SELECT * FROM aeropuertos a,aeropuertos_privados ap,direcciones d WHERE ap.id_aeropuerto = a.id AND d.id=a.id_direccion"+
+					" AND nombre LIKE '%"+sNombre+"%'";	
 		}else {
-			consulta = "SELECT * FROM aeropuertos a LEFT JOIN aeropuertos_publicos ap on ap.id_aeropuerto = a.id LEFT JOIN direcciones d ON d.id=a.id_direccion"+
-					" WHERE nombre LIKE '%"+sNombre+"%'";
+			consulta = "SELECT * FROM aeropuertos a,aeropuertos_publicos ap,direcciones d WHERE ap.id_aeropuerto = a.id AND d.id=a.id_direccion"+
+					" AND nombre LIKE '%"+sNombre+"%'";
 		}
 		try {
-			conexion = new ConexionBD();
 			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
@@ -247,5 +268,79 @@ public class AeropuertoDao {
 			}			
 		}catch(Exception e) {}
 		return listaRegistros;
+	}
+
+	public Integer comprobarClaveAvion(String modelo, int id) {
+		String consulta = "SELECT COUNT(*) FROM aviones WHERE modelo='"+modelo+"' AND id_aeropuerto="+id;
+		PreparedStatement pstmt;
+		Integer i=0;
+		try {
+			pstmt = conexion.getConexion().prepareStatement(consulta);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {i=rs.getInt(1);}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return i;
+	}
+
+	public boolean aniadirAvion(Avion a) {
+		String consulta = "INSERT INTO aviones VALUES("+a.getId()+",'"+a.getModelo()+"',"+a.getNumero_asiento()+","+a.getVelocidad_maxima()+","+
+				a.getActivado()+","+a.getId_aeropuerto()+");";
+		try {
+			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
+			pstmt.executeUpdate(consulta);
+			pstmt.close();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}		
+	}
+
+	public Avion filtrarAvion(String modelo) {
+		Avion a = null;
+		String consulta = "SELECT * FROM aviones WHERE modelo = '"+modelo+"';";
+		try {
+			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {				
+				int id = rs.getInt("id");
+				Integer num_asiento = rs.getInt(3);
+				Integer velocidad = rs.getInt("velocidad_maxima");
+				Boolean activado = rs.getBoolean("activado");
+				Integer id_aeropuerto = rs.getInt("id_aeropuerto");
+				a = new Avion(id, modelo, num_asiento, velocidad, id_aeropuerto, activado);
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {}
+		return a;		
+	}
+
+	public boolean modificarAvion(Integer id_aeropuerto, String modelo, boolean activado) {
+		Integer nActivado=0;
+		if (activado) {nActivado=1;}
+		String consulta = "UPDATE aviones SET activado = "+nActivado+" WHERE modelo = '"+modelo+"' AND id_aeropuerto = "+id_aeropuerto+";";
+		try {
+			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
+			pstmt.executeUpdate();
+			pstmt.close();
+			return true;
+		} catch (SQLException e) {
+			return false;			
+		}
+	}
+
+	public boolean borrarAvion(Integer id_aeropuerto, String modelo) {
+		String consulta = "DELETE FROM aviones WHERE id_aeropuerto="+id_aeropuerto+" AND modelo = '"+modelo+"';";
+		try {
+			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
+			pstmt.executeUpdate();
+			pstmt.close();
+			return true;
+		} catch (SQLException e) {
+			return false;			
+		}
 	}
 }

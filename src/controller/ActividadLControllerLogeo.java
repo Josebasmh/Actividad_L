@@ -42,7 +42,7 @@ public class ActividadLControllerLogeo implements Initializable{
     	String txtUsuario = Propiedades.getValor("usuario");
     	String txtContrasena = Propiedades.getValor("contrasena");
     	if(sUsuario.equals(txtUsuario)&&sContrasena.equals(txtContrasena)) {
-    		crearVentanaAux();
+    		crearVentanaAux();    		
     	}else {
     		ventanaAlerta("E", "Datos incorrectos.");
     	}

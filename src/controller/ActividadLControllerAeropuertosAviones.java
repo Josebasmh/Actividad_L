@@ -2,18 +2,18 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
 import dao.AeropuertoDao;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Menu;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
@@ -87,7 +87,7 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     
     // Variables de clase
     private AeropuertoDao aDao= new AeropuertoDao();    
-    static RegistroTabla registro; 
+    static RegistroTabla registro= new RegistroTabla(); 
     static boolean bPrivado=true;
     
 
@@ -119,14 +119,19 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     
     @FXML
     void activarDesactivar(ActionEvent event) {
-
+    	crearVentanaAux("activarDesactivar","ACTIVAR/DESACTIVAR AVIÓN",600,400);
     }
 
     @FXML
     void aniadir(ActionEvent event) {
-    	registro=new RegistroTabla();
-    	crearVentanaAux();
+    	registro.setId(0);
+    	crearVentanaAux("aniadirAeropuerto","AÑADIR AEROPUERTO",400,600);
     	tvTabla.setItems(aDao.cargarAeropuertos(bPrivado));
+    }
+    
+    @FXML
+    void aniadirAvion(ActionEvent event) {
+    	crearVentanaAux("aniadirAvion","AÑADIR AVIÓN",600,400);
     }
 
     @FXML
@@ -137,8 +142,15 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
         	tvTabla.setItems(aDao.cargarAeropuertos(bPrivado));
     	}catch(NullPointerException e) {
     		ActividadLControllerLogeo.ventanaAlerta("E", "Seleccione un registro de la tabla. Si no hay, añada uno");
+       	}catch(SQLException e) {
+       		ActividadLControllerLogeo.ventanaAlerta("E", "No se pudo borrar debido a que contiene aviones.");
        	}
     	
+    }
+    
+    @FXML
+    void borrarAvion(ActionEvent event) {
+    	crearVentanaAux("borrarAvion","BORRAR AVIÓN",600,400);
     }
 
     @FXML
@@ -152,7 +164,7 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
     			registro=new RegistroTabla(registrotabla.getId(),registrotabla.getNombre(), registrotabla.getPais(), registrotabla.getCiudad(), registrotabla.getCalle(), registrotabla.getNumero(),
     					registrotabla.getAnio(), registrotabla.getCapacidad(), registrotabla.getFinanciacion(),registrotabla.getNum_trabajadores());
     		}
-    		crearVentanaAux();
+    		crearVentanaAux("aniadirAeropuerto","MODIFICAR AEROPUERTO",1020,600);
     		tvTabla.setItems(aDao.cargarAeropuertos(bPrivado));
     	}catch(NullPointerException e){
     		ActividadLControllerLogeo.ventanaAlerta("E", "Seleccione un registro de la tabla. Si no hay, añada uno.");
@@ -221,18 +233,18 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 		tvTabla.setItems(listaRegistros);
 	}
 	
-	void crearVentanaAux() {
+	void crearVentanaAux(String fxml, String titulo,Integer anchura,Integer altura) {
 		
 		// Creación de ventana
 		Stage arg0 = new Stage();
-		arg0.setTitle("AÑADIR AVIONES"); 
+		arg0.setTitle(titulo); 
 		FlowPane aux;
 		try {
-			aux = (FlowPane)FXMLLoader.load(getClass().getResource("/fxml/aniadirAeropuerto.fxml"));
-			Scene scene = new Scene(aux,420,600);
+			aux = (FlowPane)FXMLLoader.load(getClass().getResource("/fxml/"+fxml+".fxml"));
+			Scene scene = new Scene(aux,anchura,altura);
 			arg0.setScene(scene);
-			arg0.setMinWidth(420);
-			arg0.setMinHeight(600);
+			arg0.setMinWidth(anchura);
+			arg0.setMinHeight(altura);
 			arg0.getIcons().add(new Image(getClass().getResource("/img/avion.png").toString()));
 			arg0.initModality(Modality.APPLICATION_MODAL);
 			arg0.show();
@@ -240,5 +252,17 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
 			System.out.println("La ventana no se abrió correctamente.");
 			e.printStackTrace();
 		}
+	}
+	static void ventanaAlerta(String tipoAlerta, String mensaje) {
+		Alert alert = null;
+		switch (tipoAlerta) {
+			case ("E"):
+				alert = new Alert(Alert.AlertType.ERROR);
+				break;
+			case ("I"):
+				alert = new Alert(Alert.AlertType.INFORMATION);
+		}
+        alert.setContentText(mensaje);
+        alert.showAndWait();
 	}
 }

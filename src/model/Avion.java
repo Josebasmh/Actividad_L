@@ -105,6 +105,4 @@ public class Avion {
 		return "   Modelo: " + modelo + "\n   Número de asientos: " + numero_asiento + "\n   Velocidad máxima: "
 				+ velocidad_maxima + "\n   " + txt+"\n";
 	}
-	
-	
 }
