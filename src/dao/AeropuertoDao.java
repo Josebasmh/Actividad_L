@@ -31,13 +31,13 @@ public class AeropuertoDao {
 		try {			
 			String consulta = "";
 			if (bPrivado) {
-				consulta= "SELECT * FROM aeropuertos a"
-						+ " LEFT JOIN aeropuertos_privados ap on ap.id_aeropuerto = a.id "
-						+ " LEFT JOIN direcciones d ON d.id=a.id_direccion;";	
+				consulta= "SELECT * FROM aeropuertos a,aeropuertos_privados ap,direcciones d"
+						+ " WHERE a.id=ap.id_aeropuerto"
+						+ " AND d.id=a.id_direccion;";	
 			}else {
-				consulta= "SELECT * FROM aeropuertos a "
-						+ " LEFT JOIN aeropuertos_publicos ap on ap.id_aeropuerto = a.id "
-						+ " LEFT JOIN direcciones d ON d.id=a.id_direccion;";
+				consulta= "SELECT * FROM aeropuertos a,aeropuertos_publicos ap,direcciones d "
+						+ " WHERE ap.id_aeropuerto = a.id "
+						+ " AND d.id=a.id_direccion;";
 			}
 			
 			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
@@ -151,7 +151,7 @@ public class AeropuertoDao {
 		}
 	}
 	
-	public void borrarRegistro(RegistroTabla r,boolean bPrivado) {
+	public void borrarRegistro(RegistroTabla r,boolean bPrivado) throws SQLException {
 		String consultaIdDireccion = "SELECT id_direccion FROM aeropuertos WHERE id = " + r.getId() + ";";
 		String consultaAeropuerto = "DELETE FROM aeropuertos WHERE id = " + r.getId() + ";";
 		String consultaPri = "DELETE FROM aeropuertos_privados WHERE id_aeropuerto = " + r.getId() + ";";
@@ -159,26 +159,23 @@ public class AeropuertoDao {
 		
 		PreparedStatement pstmt;
 		int id=-1;
-		try {
-			pstmt = conexion.getConexion().prepareStatement(consultaIdDireccion);
-			ResultSet rs = pstmt.executeQuery();
-			while(rs.next()) {
-				id=rs.getInt("id_direccion");
-			}
-			rs.close();
-			if(bPrivado) {				
-				pstmt.executeUpdate(consultaPri);
-			}else {
-				pstmt.executeUpdate(consultaPub);
-			}
-			
-			pstmt.executeUpdate(consultaAeropuerto);
-			String consultaDireccion = "DELETE FROM direcciones WHERE id = " + id + ";";
-			pstmt.executeUpdate(consultaDireccion);
-			pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
+	
+		pstmt = conexion.getConexion().prepareStatement(consultaIdDireccion);
+		ResultSet rs = pstmt.executeQuery();
+		while(rs.next()) {
+			id=rs.getInt("id_direccion");
 		}
+		rs.close();
+		if(bPrivado) {				
+			pstmt.executeUpdate(consultaPri);
+		}else {
+			pstmt.executeUpdate(consultaPub);
+		}
+		
+		pstmt.executeUpdate(consultaAeropuerto);
+		String consultaDireccion = "DELETE FROM direcciones WHERE id = " + id + ";";
+		pstmt.executeUpdate(consultaDireccion);
+		pstmt.close();
 	}
 	
 	public void modificarRegistro(RegistroTabla rt,boolean privado) {		
@@ -240,11 +237,11 @@ public class AeropuertoDao {
 		ObservableList<RegistroTabla>listaRegistros = FXCollections.observableArrayList();
 		String consulta="";
 		if (bPrivado) {
-			consulta = "SELECT * FROM aeropuertos a LEFT JOIN aeropuertos_privados ap on ap.id_aeropuerto = a.id LEFT JOIN direcciones d ON d.id=a.id_direccion"+
-					" WHERE nombre LIKE '%"+sNombre+"%'";	
+			consulta = "SELECT * FROM aeropuertos a,aeropuertos_privados ap,direcciones d WHERE ap.id_aeropuerto = a.id AND d.id=a.id_direccion"+
+					" AND nombre LIKE '%"+sNombre+"%'";	
 		}else {
-			consulta = "SELECT * FROM aeropuertos a LEFT JOIN aeropuertos_publicos ap on ap.id_aeropuerto = a.id LEFT JOIN direcciones d ON d.id=a.id_direccion"+
-					" WHERE nombre LIKE '%"+sNombre+"%'";
+			consulta = "SELECT * FROM aeropuertos a,aeropuertos_publicos ap,direcciones d WHERE ap.id_aeropuerto = a.id AND d.id=a.id_direccion"+
+					" AND nombre LIKE '%"+sNombre+"%'";
 		}
 		try {
 			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
@@ -333,5 +330,17 @@ public class AeropuertoDao {
 		} catch (SQLException e) {
 			return false;			
 		}
-	}	
+	}
+
+	public boolean borrarAvion(Integer id_aeropuerto, String modelo) {
+		String consulta = "DELETE FROM aviones WHERE id_aeropuerto="+id_aeropuerto+" AND modelo = '"+modelo+"';";
+		try {
+			PreparedStatement pstmt = conexion.getConexion().prepareStatement(consulta);
+			pstmt.executeUpdate();
+			pstmt.close();
+			return true;
+		} catch (SQLException e) {
+			return false;			
+		}
+	}
 }

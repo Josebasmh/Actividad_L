@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
@@ -141,13 +142,15 @@ public class ActividadLControllerAeropuertosAviones implements Initializable{
         	tvTabla.setItems(aDao.cargarAeropuertos(bPrivado));
     	}catch(NullPointerException e) {
     		ActividadLControllerLogeo.ventanaAlerta("E", "Seleccione un registro de la tabla. Si no hay, añada uno");
+       	}catch(SQLException e) {
+       		ActividadLControllerLogeo.ventanaAlerta("E", "No se pudo borrar debido a que contiene aviones.");
        	}
     	
     }
     
     @FXML
     void borrarAvion(ActionEvent event) {
-
+    	crearVentanaAux("borrarAvion","BORRAR AVIÓN",600,400);
     }
 
     @FXML
